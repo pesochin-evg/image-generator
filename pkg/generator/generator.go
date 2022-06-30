@@ -1,49 +1,55 @@
 package imagen
 
 import (
-	// "fmt"
+	"github.com/Antipascal/image-generator/pkg/field"
 	"image"
-	"image/png"
-	"log"
+	"image/color"
 	"math"
-	"os"
 )
 
 const (
-	Width  = 1024
-	Height = 1024
+	Width  = 828
+	Height = 1792
 )
 
-func Generate() {
+func Generate() *image.RGBA {
 	m := image.NewRGBA(image.Rect(0, 0, Width, Height))
-	var newX, newY float64
+	f := field.New()
 	for x := 0; x < Width; x++ {
 		for y := 0; y < Height; y++ {
-			// if math.Pow(float64(x-Width/2), 2)+math.Pow(float64(y-Height/2), 2) >= 400 {
-			newX = float64(x - Width/2)
-			newY = float64(Height/2 - y)
-			if newY == 0 {
-				newY = 0.00001
-			}
-			if newY >= 0 {
-				m.SetRGBA(x, y, HSVToRGBA(math.Atan(newX/newY)*180/math.Pi+45, 1, 1))
+			m.SetRGBA(x, y, AngleColor(f.Get(float64(x), float64(y), Height, Width)))
+		}
+	}
+	return m
+}
+
+func AngleColor(v field.Vector, max_length float64) color.RGBA {
+	var angle float64
+	x, y := v.X, v.Y
+
+	if y == 0 {
+		if x > 0 {
+			angle = 90
+		} else {
+			angle = 270
+		}
+	} else {
+		var tg float64 = math.Atan(math.Abs(x/y)) * 180 / math.Pi
+		if x >= 0 {
+			if y > 0 {
+				angle = tg
 			} else {
-				m.SetRGBA(x, y, HSVToRGBA(math.Atan(newX/newY)*180/math.Pi+225, 1, 1))
+				angle = 180 - tg
 			}
-			// fmt.Println(math.Atan(newX/newY)*180/math.Pi + 180)
-			// }
+		} else {
+			if y > 0 {
+				angle = 360 - tg
+			} else {
+				angle = 180 + tg
+			}
 		}
 	}
 
-	f, err := os.Create("outimage.png")
-	if err != nil {
-		log.Println(err)
-	}
-	defer f.Close()
-
-	err = png.Encode(f, m)
-	if err != nil {
-		log.Println(err)
-	}
-
+	length := math.Sqrt(x*x + y*y)
+	return HSVToRGBA(angle, length/max_length, 0.8)
 }

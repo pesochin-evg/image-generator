@@ -38,12 +38,15 @@ func HSVToRGBA(h, s, v float64) color.RGBA {
 		g = t
 		b = p
 	case 1:
-		r = q
-		g = v
+		// r = q
+		// g = v
+		// b = p
+		r = v
+		g = t
 		b = p
 	case 2:
-		r = p
-		g = v
+		r = v
+		g = p
 		b = t
 	case 3:
 		r = p
