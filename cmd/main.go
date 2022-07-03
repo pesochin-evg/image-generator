@@ -1,9 +1,6 @@
 package main
 
 import (
-	"net/http"
-	"os"
-
 	"github.com/Antipascal/image-generator/pkg/bot"
 )
 
