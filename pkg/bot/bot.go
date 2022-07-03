@@ -87,7 +87,7 @@ func Start() {
 			if isAdmin {
 				b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username)
 			}
-			c.Send("Generating image for you...", empty)
+			c.Send("Generating image for you (approx. 2 min)", empty)
 			GenerateImages(id, u.FName+u.Date+u.SName)
 			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
 			f := &tele.Document{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_1.png"), FileName: "First.png"}
