@@ -89,9 +89,9 @@ func Start() {
 			}
 			c.Send("Generating image for you...", empty)
 			GenerateImages(id, u.FName+u.Date+u.SName)
-			c.Send(&tele.Photo{File: tele.FromDisk("storage/images/" + strconv.FormatInt(id, 10) + "_0.png")}, empty)
-			f := &tele.Document{File: tele.FromDisk("storage/images/" + strconv.FormatInt(id, 10) + "_1.png"), FileName: "First.png"}
-			s := &tele.Document{File: tele.FromDisk("storage/images/" + strconv.FormatInt(id, 10) + "_2.png"), FileName: "Second.png"}
+			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
+			f := &tele.Document{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_1.png"), FileName: "First.png"}
+			s := &tele.Document{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_2.png"), FileName: "Second.png"}
 			c.SendAlbum(tele.Album{f, s}, empty)
 			DeleteImages(id)
 			delete(Ulist, id)
@@ -114,7 +114,7 @@ func Start() {
 func GenerateImages(id int64, seed string) {
 	m := imagen.Generate(seed)
 	for i := 0; i < 3; i++ {
-		f, err := os.Create("storage/images/" + strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
+		f, err := os.Create(strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
 		if err != nil {
 			log.Println(err)
 		}
@@ -128,7 +128,7 @@ func GenerateImages(id int64, seed string) {
 
 func DeleteImages(id int64) {
 	for i := 0; i < 3; i++ {
-		e := os.Remove("storage/images/" + strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
+		e := os.Remove(strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
 		if e != nil {
 			log.Fatal(e)
 		}
