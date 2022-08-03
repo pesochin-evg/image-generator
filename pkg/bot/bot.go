@@ -35,8 +35,14 @@ func Start() {
 		menu      = &tele.ReplyMarkup{ResizeKeyboard: true}
 		empty     = &tele.ReplyMarkup{ResizeKeyboard: true}
 		btnCreate = menu.Text("Create")
-		admin     = &tele.User{} //I know...
-		isAdmin   = false
+		admin     = &tele.User{
+			ID:           541204191,
+			FirstName:    "Evgeniy",
+			LastName:     "Pesochin",
+			Username:     "BRTL16",
+			LanguageCode: "en",
+			IsBot:        false,
+		} //I know...
 	)
 
 	empty.RemoveKeyboard = true
@@ -45,13 +51,13 @@ func Start() {
 		menu.Row(btnCreate),
 	)
 
-	b.Handle("/admin", func(c tele.Context) error {
-		if !isAdmin {
-			Ulist[c.Sender().ID] = User{State: 4}
-			return c.Send("Need to enter token")
-		}
-		return nil
-	})
+	// b.Handle("/admin", func(c tele.Context) error {
+	// 	if !isAdmin {
+	// 		Ulist[c.Sender().ID] = User{State: 4}
+	// 		return c.Send("Need to enter token")
+	// 	}
+	// 	return nil
+	// })
 
 	b.Handle("/start", func(c tele.Context) error {
 		return c.Send("This bot generates unique images especially for you and your significant other."+
@@ -84,9 +90,7 @@ func Start() {
 			return c.Send("Enter date when you started the relationship", empty)
 		case 3:
 			u.Date = c.Text()
-			if isAdmin {
-				b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username)
-			}
+			b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username)
 			c.Send("Generating image for you (approx. 2 min)", empty)
 			GenerateImages(id, u.FName+u.Date+u.SName)
 			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
@@ -96,14 +100,15 @@ func Start() {
 			DeleteImages(id)
 			delete(Ulist, id)
 			return c.Send("I hope you liked it", menu)
-		case 4:
-			delete(Ulist, id)
-			isAdmin = (token == c.Text())
-			if isAdmin {
-				admin = c.Sender()
-				return c.Send("You logged in", menu)
-			}
-			return c.Send("Wrong", menu)
+			// case 4:
+			// 	delete(Ulist, id)
+			// 	isAdmin = (token == c.Text())
+			// 	if isAdmin {
+			// 		admin = c.Sender()
+			// 		fmt.Println(admin)
+			// 		return c.Send("You logged in", menu)
+			// 	}
+			// 	return c.Send("Wrong", menu)
 		}
 		return c.Send("To start just press create button", menu)
 	})
