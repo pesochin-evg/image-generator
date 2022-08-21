@@ -51,14 +51,6 @@ func Start() {
 		menu.Row(btnCreate),
 	)
 
-	// b.Handle("/admin", func(c tele.Context) error {
-	// 	if !isAdmin {
-	// 		Ulist[c.Sender().ID] = User{State: 4}
-	// 		return c.Send("Need to enter token")
-	// 	}
-	// 	return nil
-	// })
-
 	b.Handle("/start", func(c tele.Context) error {
 		return c.Send("This bot generates unique images especially for you and your significant other."+
 			" Two wallpapers are created so that they form a common picture. The resulting drawing will be"+
@@ -90,7 +82,9 @@ func Start() {
 			return c.Send("Enter date when you started the relationship", empty)
 		case 3:
 			u.Date = c.Text()
-			b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username)
+			b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+
+				strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username+
+				"( "+u.FName+" "+u.SName+" "+u.Date+" )")
 			c.Send("Generating image for you (approx. 2 min)", empty)
 			GenerateImages(id, u.FName+u.Date+u.SName)
 			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
