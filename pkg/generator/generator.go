@@ -23,20 +23,10 @@ func Fill(m *image.RGBA, f *field.Field, minY, maxY int, ch chan bool) {
 	ch <- true
 }
 
-func Generate(seed string) []*image.RGBA {
+func Generate(seed int64) *image.RGBA {
 	m := image.NewRGBA(image.Rect(0, 0, Width, Height))
-	var (
-		IntSeed int64
-		pow     int64
-	)
-	pow = 2
 
-	for i := range seed {
-		IntSeed += int64(i) * pow
-		pow *= 2
-	}
-
-	f := field.New(IntSeed)
+	f := field.New(seed)
 
 	step := Height / Blocks
 	ch := make(chan bool)
@@ -48,11 +38,7 @@ func Generate(seed string) []*image.RGBA {
 		<-ch
 	}
 
-	var result []*image.RGBA = make([]*image.RGBA, 3)
-	result[0] = m
-	result[1] = m.SubImage(image.Rectangle{image.Point{0, 0}, image.Point{828, 1720}}).(*image.RGBA)
-	result[2] = m.SubImage(image.Rectangle{image.Point{828, 0}, image.Point{1656, 1720}}).(*image.RGBA)
-	return result
+	return m
 }
 
 func AngleColor(v field.Vector, max_length float64) color.RGBA {
@@ -77,7 +63,7 @@ func AngleColor(v field.Vector, max_length float64) color.RGBA {
 			if y > 0 {
 				angle = 360 - tg
 			} else {
-				angle = 180 + tg
+				angle = 180 - tg
 			}
 		}
 	}

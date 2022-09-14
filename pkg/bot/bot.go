@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"image"
 	"time"
 
 	imagen "github.com/Antipascal/image-generator/pkg/generator"
@@ -82,10 +83,12 @@ func Start() {
 			return c.Send("Enter date when you started the relationship", empty)
 		case 3:
 			u.Date = c.Text()
+
 			b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+
 				strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username+
 				"( "+u.FName+" "+u.SName+" "+u.Date+" )")
 			c.Send("Generating image for you (approx. 2 min)", empty)
+
 			GenerateImages(id, u.FName+u.Date+u.SName)
 			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
 			f := &tele.Document{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_1.png"), FileName: "First.png"}
@@ -94,15 +97,6 @@ func Start() {
 			DeleteImages(id)
 			delete(Ulist, id)
 			return c.Send("I hope you liked it", menu)
-			// case 4:
-			// 	delete(Ulist, id)
-			// 	isAdmin = (token == c.Text())
-			// 	if isAdmin {
-			// 		admin = c.Sender()
-			// 		fmt.Println(admin)
-			// 		return c.Send("You logged in", menu)
-			// 	}
-			// 	return c.Send("Wrong", menu)
 		}
 		return c.Send("To start just press create button", menu)
 	})
@@ -111,14 +105,32 @@ func Start() {
 }
 
 func GenerateImages(id int64, seed string) {
-	m := imagen.Generate(seed)
+
+	var (
+		IntSeed int64
+		pow     int64
+	)
+	pow = 2
+
+	for i := range seed {
+		IntSeed += int64(i) * pow
+		pow *= 2
+	}
+
+	im := imagen.Generate(IntSeed)
+
+	var result []*image.RGBA = make([]*image.RGBA, 3)
+	result[0] = im
+	result[1] = im.SubImage(image.Rectangle{image.Point{0, 0}, image.Point{828, 1720}}).(*image.RGBA)
+	result[2] = im.SubImage(image.Rectangle{image.Point{828, 0}, image.Point{1656, 1720}}).(*image.RGBA)
+	
 	for i := 0; i < 3; i++ {
 		f, err := os.Create(strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
 		if err != nil {
 			log.Println(err)
 		}
 
-		if png.Encode(f, m[i]) != nil {
+		if png.Encode(f, result[i]) != nil {
 			log.Println(err)
 		}
 		f.Close()
