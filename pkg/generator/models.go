@@ -45,6 +45,9 @@ func HSVToRGBA(h, s, v float64) color.RGBA {
 		g = t
 		b = p
 	case 2:
+		// r = p
+		// g = v
+		// b = t
 		r = v
 		g = p
 		b = t
@@ -57,13 +60,13 @@ func HSVToRGBA(h, s, v float64) color.RGBA {
 		g = p
 		b = v
 	default:
-		r = v
+		r = v // p looks cool
 		g = p
 		b = q
 	}
 
-	outR := uint8(Clamp(r*255+0.5, 0, 255))
+	outR := uint8(Clamp(r*255+0.5, 0, 255)) 
 	outG := uint8(Clamp(g*255+0.5, 0, 255))
-	outB := uint8(Clamp(b*255+0.5, 0, 255))
+	outB := uint8(Clamp(b*255+0.5, 0, 255)) 
 	return color.RGBA{outR, outG, outB, 0xFF}
 }

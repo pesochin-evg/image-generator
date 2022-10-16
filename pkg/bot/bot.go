@@ -117,7 +117,7 @@ func GenerateImages(id int64, seed string) {
 		pow *= 2
 	}
 
-	im := imagen.Generate(IntSeed)
+	im := imagen.Generate(IntSeed, 1656, 1720)
 
 	var result []*image.RGBA = make([]*image.RGBA, 3)
 	result[0] = im

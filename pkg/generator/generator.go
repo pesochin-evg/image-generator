@@ -9,26 +9,25 @@ import (
 )
 
 const (
-	Width  = 1656
-	Height = 1720
-	Blocks = 10
+	Blocks = 10 // Count of image stripes for generating with goroutine
 )
 
 func Fill(m *image.RGBA, f *field.Field, minY, maxY int, ch chan bool) {
-	for x := 0; x < Width; x++ {
+	width := m.Bounds().Dx()
+	for x := 0; x < width; x++ {
 		for y := minY; y <= maxY; y++ {
-			m.SetRGBA(x, y, AngleColor(f.Get(float64(x), float64(y), Height, Width)))
+			m.SetRGBA(x, y, AngleColor(f.Get(x, y)))
 		}
 	}
 	ch <- true
 }
 
-func Generate(seed int64) *image.RGBA {
-	m := image.NewRGBA(image.Rect(0, 0, Width, Height))
+func Generate(seed int64, width, height int) *image.RGBA {
+	m := image.NewRGBA(image.Rect(0, 0, width, height))
 
-	f := field.New(seed)
+	f := field.GenerateField(seed)
 
-	step := Height / Blocks
+	step := height / Blocks
 	ch := make(chan bool)
 	for i := 0; i < Blocks; i++ {
 		go Fill(m, f, i*step, (i+1)*step, ch)
@@ -57,13 +56,13 @@ func AngleColor(v field.Vector, max_length float64) color.RGBA {
 			if y > 0 {
 				angle = tg
 			} else {
-				angle = 180 + tg
+				angle = 180 - tg
 			}
 		} else {
 			if y > 0 {
 				angle = 360 - tg
 			} else {
-				angle = 180 - tg
+				angle = 180 + tg
 			}
 		}
 	}

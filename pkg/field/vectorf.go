@@ -4,13 +4,15 @@ import (
 	"github.com/ojrac/opensimplex-go"
 )
 
+const (
+	freqStart = 250 // minimal frequency value
+	freqDiff  = 50  // max value, that add to freqStart
+	maxLength = 0.5 // Length of the longest vector
+)
+
 type Vector struct {
 	X float64
 	Y float64
-}
-
-func (v *Vector) Swap() {
-	v.X, v.Y = v.Y, v.X
 }
 
 type Field struct {
@@ -19,17 +21,20 @@ type Field struct {
 	noise opensimplex.Noise
 }
 
-func New(seed int64) *Field {
+// Generates new field object and 2Dnoise
+// based on given seed variable
+func GenerateField(seed int64) *Field {
 	var f Field
 	f.Seed = seed
-	f.freq = float64(seed % 2)
-	f.freq += 250
+	f.freq = freqStart + float64(seed%freqDiff)
 	f.noise = opensimplex.NewNormalized(f.Seed)
 	return &f
 }
 
-func (f *Field) Get(x, y, Height, Width float64) (Vector, float64) {
-	xFloat := (Height / f.freq * x / Height)
-	yFloat := (Width / f.freq * y / Width)
-	return Vector{X: f.noise.Eval2(xFloat, yFloat) - 0.5, Y: f.noise.Eval2(yFloat, xFloat) - 0.5}, 0.5
+// Returns vector for given point and maximal length
+// of the vector
+func (f *Field) Get(x, y int) (Vector, float64) {
+	fX := (float64(x) / f.freq)
+	fY := (float64(y) / f.freq)
+	return Vector{X: f.noise.Eval2(fX, fY) - 0.5, Y: f.noise.Eval2(fX + 1000, fY + 1000) - 0.5}, maxLength
 }
