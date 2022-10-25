@@ -1,13 +1,14 @@
 package bot
 
 import (
+	"image"
 	"image/png"
 	"log"
 	"os"
 	"strconv"
-	"image"
 	"time"
 
+	"github.com/Antipascal/image-generator/pkg/field"
 	imagen "github.com/Antipascal/image-generator/pkg/generator"
 
 	tele "gopkg.in/telebot.v3"
@@ -117,7 +118,7 @@ func GenerateImages(id int64, seed string) {
 		pow *= 2
 	}
 
-	im := imagen.Generate(IntSeed, 1656, 1720)
+	im := imagen.Generate(field.GenerateField(IntSeed), 1656, 1720)
 
 	var result []*image.RGBA = make([]*image.RGBA, 3)
 	result[0] = im

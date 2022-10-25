@@ -8,10 +8,6 @@ import (
 	"github.com/Antipascal/image-generator/pkg/field"
 )
 
-const (
-	Blocks = 10 // Count of image stripes for generating with goroutine
-)
-
 func Fill(m *image.RGBA, f *field.Field, minY, maxY int, ch chan bool) {
 	width := m.Bounds().Dx()
 	for x := 0; x < width; x++ {
@@ -22,18 +18,24 @@ func Fill(m *image.RGBA, f *field.Field, minY, maxY int, ch chan bool) {
 	ch <- true
 }
 
-func Generate(seed int64, width, height int) *image.RGBA {
+func Generate(f *field.Field, width, height int) *image.RGBA {
 	m := image.NewRGBA(image.Rect(0, 0, width, height))
 
-	f := field.GenerateField(seed)
+	blocks := 1
+	for i := 15; i > 0; i-- {
+		if height%i == 0 {
+			blocks = i
+			break
+		}
+	}
 
-	step := height / Blocks
+	step := height / blocks
 	ch := make(chan bool)
-	for i := 0; i < Blocks; i++ {
+	for i := 0; i < blocks; i++ {
 		go Fill(m, f, i*step, (i+1)*step, ch)
 	}
 
-	for i := 0; i < Blocks; i++ {
+	for i := 0; i < blocks; i++ {
 		<-ch
 	}
 

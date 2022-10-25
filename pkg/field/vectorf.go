@@ -31,6 +31,16 @@ func GenerateField(seed int64) *Field {
 	return &f
 }
 
+// Generates new field object and 2Dnoise
+// based on given seed variable
+func GenerateFieldFreq(seed int64, freq float64) *Field {
+	var f Field
+	f.Seed = seed
+	f.freq = freq
+	f.noise = opensimplex.NewNormalized(f.Seed)
+	return &f
+}
+
 // Returns vector for given point and maximal length
 // of the vector
 func (f *Field) Get(x, y int) (Vector, float64) {
