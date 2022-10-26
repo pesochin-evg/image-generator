@@ -8,12 +8,14 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Antipascal/image-generator/pkg/field"
-	imagen "github.com/Antipascal/image-generator/pkg/generator"
+	field "github.com/Antipascal/image-generator/pkg/img/field"
+	imagen "github.com/Antipascal/image-generator/pkg/img/generator"
 
 	tele "gopkg.in/telebot.v3"
 )
 
+// Starts bot with token IMAGEN_TOKEN from OS
+// enviroment variables
 func Start() {
 	token, exists := os.LookupEnv("IMAGEN_TOKEN")
 	if !exists {
@@ -88,7 +90,7 @@ func Start() {
 			b.Send(admin, "* "+c.Sender().FirstName+" "+c.Sender().LastName+" - "+
 				strconv.FormatInt(c.Sender().ID, 10)+" https://t.me/@"+c.Sender().Username+
 				"( "+u.FName+" "+u.SName+" "+u.Date+" )")
-			c.Send("Generating image for you (approx. 2 min)", empty)
+			c.Send("Generating image for you (approx. 1 min)", empty)
 
 			GenerateImages(id, u.FName+u.Date+u.SName)
 			c.Send(&tele.Photo{File: tele.FromDisk(strconv.FormatInt(id, 10) + "_0.png")}, empty)
@@ -105,6 +107,8 @@ func Start() {
 	b.Start()
 }
 
+// Generate one big image and devides it into two parts
+// images are stored at id_0.png id_1.png id_2.png
 func GenerateImages(id int64, seed string) {
 
 	var (
@@ -124,7 +128,7 @@ func GenerateImages(id int64, seed string) {
 	result[0] = im
 	result[1] = im.SubImage(image.Rectangle{image.Point{0, 0}, image.Point{828, 1720}}).(*image.RGBA)
 	result[2] = im.SubImage(image.Rectangle{image.Point{828, 0}, image.Point{1656, 1720}}).(*image.RGBA)
-	
+
 	for i := 0; i < 3; i++ {
 		f, err := os.Create(strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")
 		if err != nil {
@@ -138,6 +142,7 @@ func GenerateImages(id int64, seed string) {
 	}
 }
 
+// Delets all of the created files in GenerateImages()
 func DeleteImages(id int64) {
 	for i := 0; i < 3; i++ {
 		e := os.Remove(strconv.FormatInt(id, 10) + "_" + strconv.Itoa(i) + ".png")

@@ -5,7 +5,7 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/Antipascal/image-generator/pkg/field"
+	"github.com/Antipascal/image-generator/pkg/img/field"
 )
 
 func Fill(m *image.RGBA, f *field.Field, minY, maxY int, ch chan bool) {
