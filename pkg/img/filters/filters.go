@@ -5,109 +5,104 @@ import (
 	"math"
 )
 
-// changes color c to color in red colorpalette
+// RedFilter changes color c to color in red palette
 func RedFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a + 30),
-		setToBounds(a * 0.3),
-		setToBounds(a * 0.4),
-		255}
+		R: setToBounds(a + 30),
+		G: setToBounds(a * 0.3),
+		B: setToBounds(a * 0.4),
+		A: 255}
 }
 
-// changes color c to color in grey colorpalette
+// GreyFilter changes color c to color in grey palette
 func GreyFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a - 20),
-		setToBounds(a),
-		setToBounds(a + 40),
-		255}
+		R: setToBounds(a - 20),
+		G: setToBounds(a),
+		B: setToBounds(a + 40),
+		A: 255}
 }
 
-// changes color c to color in purple colorpalette
+// PurpleFilter changes color c to color in purple palette
 func PurpleFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 0.4 + 30),
-		setToBounds(a * 0.4 + 30),
-		setToBounds(a * 1 + 40),
-		255}
+		R: setToBounds(a*0.4 + 30),
+		G: setToBounds(a*0.4 + 30),
+		B: setToBounds(a*1 + 40),
+		A: 255}
 }
 
-// changes color c to color in blue colorpalette
+// BlueFilter changes color c to color in blue palette
 func BlueFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
-	// return color.RGBA{
-	// 	setToBounds(a * 0.2 + 40),
-	// 	setToBounds(a * 0.7 + 30),
-	// 	setToBounds(a * 1.5 + 40),
-	// 	255}
 	return color.RGBA{
-		setToBounds(a - 40),
-		setToBounds(a),
-		setToBounds(a * 1.2 + 60),
-		255}
+		R: setToBounds(a - 40),
+		G: setToBounds(a),
+		B: setToBounds(a*1.2 + 60),
+		A: 255}
 }
 
-// changes color c to color in blue colorpalette
+// DarkBlueFilter changes color c to color in blue palette
 func DarkBlueFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 0.2),
-		setToBounds(a * 0.4),
-		setToBounds(a * 1.5),
-		255}
+		R: setToBounds(a * 0.2),
+		G: setToBounds(a * 0.4),
+		B: setToBounds(a * 1.5),
+		A: 255}
 }
 
-// changes color c to color in yellow colorpalette
+// YellowFilter changes color c to color in yellow palette
 func YellowFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 1 + 40),
-		setToBounds(a * 1 + 40),
-		setToBounds(a * 0.1 ),
-		255}
+		R: setToBounds(a*1 + 40),
+		G: setToBounds(a*1 + 40),
+		B: setToBounds(a * 0.1),
+		A: 255}
 }
 
-// changes color c to color in orange colorpalette
+// OrangeFilter changes color c to color in orange palette
 func OrangeFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 1 + 50),
-		setToBounds(a * 0.55 + 50),
-		setToBounds(a * 0.3 - 10),
-		255}
+		R: setToBounds(a*1 + 50),
+		G: setToBounds(a*0.55 + 50),
+		B: setToBounds(a*0.3 - 10),
+		A: 255}
 }
 
-// changes color c to color in green colorpalette
+// GreenFilter changes color c to color in green palette
 func GreenFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 0.8 + 20),
-		setToBounds(a * 1.2 + 20),
-		setToBounds(a * 0.6 + 20),
-		255}
+		R: setToBounds(a*0.8 + 20),
+		G: setToBounds(a*1.2 + 20),
+		B: setToBounds(a*0.6 + 20),
+		A: 255}
 }
 
-// changes color c to color in white colorpalette
+// WhiteFilter changes color c to color in white palette
 func WhiteFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 1.5),
-		setToBounds(a * 1.5),
-		setToBounds(a * 1.5),
-		255}
+		R: setToBounds(a * 1.5),
+		G: setToBounds(a * 1.5),
+		B: setToBounds(a * 1.5),
+		A: 255}
 }
 
-// changes color c to color in black colorpalette
+// BlackFilter changes color c to color in black palette
 func BlackFilter(c color.RGBA) color.RGBA {
 	a := avg(c)
 	return color.RGBA{
-		setToBounds(a * 0.4),
-		setToBounds(a * 0.4),
-		setToBounds(a * 0.4),
-		255}
+		R: setToBounds(a * 0.4),
+		G: setToBounds(a * 0.4),
+		B: setToBounds(a * 0.4),
+		A: 255}
 }
 
 // Fits value a to bounds [0..255]

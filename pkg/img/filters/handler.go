@@ -7,7 +7,7 @@ import (
 
 // Filter add f filter function to every pixel on
 // image m in r bounds.
-func Filter(m *image.RGBA, r *image.Rectangle, f func(color.RGBA) color.RGBA) (*image.RGBA) {
+func Filter(m *image.RGBA, r *image.Rectangle, f func(color.RGBA) color.RGBA) *image.RGBA {
 	width := r.Dx()
 	height := r.Dy()
 	nm := image.NewRGBA(m.Rect)
@@ -20,7 +20,7 @@ func Filter(m *image.RGBA, r *image.Rectangle, f func(color.RGBA) color.RGBA) (*
 	return nm
 }
 
-// Blur add box blur on image m in r bounds with
+// BoxBlur add box blur on image m in r bounds with
 // kernel size k.
 func BoxBlur(m *image.RGBA, r *image.Rectangle, k int) *image.RGBA {
 	nm := image.NewRGBA(m.Rect)
@@ -45,11 +45,11 @@ func avgRectangle(m *image.RGBA, re *image.Rectangle, x, y, size int) color.RGBA
 			count++
 		}
 	}
-	return (color.RGBA{
-		uint8(r / count),
-		uint8(g / count),
-		uint8(b / count),
-		255})
+	return color.RGBA{
+		R: uint8(r / count),
+		G: uint8(g / count),
+		B: uint8(b / count),
+		A: 255}
 }
 
 func min(a, b int) int {

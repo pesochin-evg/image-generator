@@ -42,7 +42,7 @@ func Generate(f *field.Field, width, height int) *image.RGBA {
 	return m
 }
 
-func AngleColor(v field.Vector, max_length float64) color.RGBA {
+func AngleColor(v field.Vector, maxLength float64) color.RGBA {
 	var angle float64
 	x, y := v.X, v.Y
 
@@ -53,7 +53,7 @@ func AngleColor(v field.Vector, max_length float64) color.RGBA {
 			angle = 270
 		}
 	} else {
-		var tg float64 = math.Atan(math.Abs(x/y)) * 180 / math.Pi
+		var tg = math.Atan(math.Abs(x/y)) * 180 / math.Pi
 		if x >= 0 {
 			if y > 0 {
 				angle = tg
@@ -70,5 +70,5 @@ func AngleColor(v field.Vector, max_length float64) color.RGBA {
 	}
 
 	length := math.Sqrt(x*x + y*y)
-	return HSVToRGBA(angle, length/max_length, 0.8)
+	return HSVToRGBA(angle, length/maxLength, 0.8)
 }
