@@ -18,10 +18,9 @@ func Clamp(value, min, max float64) float64 {
 func HSVToRGBA(h, s, v float64) color.RGBA {
 	var i, f, p, q, t float64
 
-	// Achromatic
 	if s == 0 {
 		outV := uint8(Clamp(v*255+0.5, 0, 255))
-		return color.RGBA{outV, outV, outV, 0xFF}
+		return color.RGBA{R: outV, G: outV, B: outV, A: 0xFF}
 	}
 
 	h /= 60
@@ -45,6 +44,9 @@ func HSVToRGBA(h, s, v float64) color.RGBA {
 		g = t
 		b = p
 	case 2:
+		// r = p
+		// g = v
+		// b = t
 		r = v
 		g = p
 		b = t
@@ -65,5 +67,5 @@ func HSVToRGBA(h, s, v float64) color.RGBA {
 	outR := uint8(Clamp(r*255+0.5, 0, 255))
 	outG := uint8(Clamp(g*255+0.5, 0, 255))
 	outB := uint8(Clamp(b*255+0.5, 0, 255))
-	return color.RGBA{outR, outG, outB, 0xFF}
+	return color.RGBA{R: outR, G: outG, B: outB, A: 0xFF}
 }
