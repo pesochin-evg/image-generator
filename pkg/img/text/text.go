@@ -11,7 +11,7 @@ import (
 
 func AddRune(dst *image.RGBA, pattern image.Image, text string, point fixed.Point26_6) error {
 	var fontSize float64 = 300
-	data, err := os.ReadFile("pkg/img/text/Fonts/Arial Rounded Bold.ttf")
+	data, err := os.ReadFile("/Fonts/Arial Rounded Bold.ttf")
 	if err != nil {
 		log.Fatal("Font not found")
 		return err
