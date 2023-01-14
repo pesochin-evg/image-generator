@@ -40,7 +40,7 @@ func GetAdmins() Admins {
 
 func GetUserString(c tele.Context) string {
 	var sb strings.Builder
-	sb.WriteString("* ")
+	sb.WriteString("⚙️ ")
 	sb.WriteString(c.Sender().FirstName)
 	sb.WriteString(" ")
 	sb.WriteString(c.Sender().LastName)
