@@ -36,8 +36,8 @@ func sendImages(c *UserContext, t tele.Context) error {
 		return err
 	}
 	return t.SendAlbum(tele.Album{
-		&tele.Document{File: tele.FromReader(readImage(result[1])), FileName: "First.png"},
-		&tele.Document{File: tele.FromReader(readImage(result[2])), FileName: "Second.png"},
+		&tele.Document{File: tele.FromReader(readImage(result[1])), FileName: "Left.png"},
+		&tele.Document{File: tele.FromReader(readImage(result[2])), FileName: "Right.png"},
 	})
 }
 
